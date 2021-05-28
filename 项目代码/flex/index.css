@@ -388,11 +388,7 @@ padding: 1rem 3rem;
 }
 
 .open>img{
-    margin: 20px 20px 0;
-    position: relative;
-    width: auto;
-    max-width: 100px;
-    max-height: 60px;
+    padding:1rem 0 0.8rem 1rem;
 }
 .sor img{
     width:80px;

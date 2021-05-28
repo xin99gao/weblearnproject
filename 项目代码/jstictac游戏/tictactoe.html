@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			* {
+				box-sizing: border-box;
+				background-color: cornflowerblue;
+			}
+
+			.tictactoe {
+				margin: 3rem;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+			}
+
+			.board {
+				width: 300px;
+				height: 300px;
+				display: flex;
+				flex-wrap: wrap;
+			}
+
+			.cell {
+				width: 100px;
+				height: 100px;
+				background: #2d2f42;
+				border: 1px solid #0f0e18;
+				cursor: pointer;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				transition: background 500ms ease;
+			}
+
+			.cell:hover {
+				background: #454966;
+			}
+
+			.cell .iconfont {
+				background: transparent;
+				width: 100%;
+				height: 100%;
+				font-size: 50px;
+				line-height: 100px;
+				text-align: center;
+				vertical-align: middle;
+			}
+
+			.blue {
+				color: #7ceefc;
+			}
+
+			.purple {
+				color: #ea4dc5;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="tictactoe">
+			<div class="grid"></div>
+		</div>
+	</body>
+	<script>
+		let parrent = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+		let player=1;//代表棋子为剪刀
+		function build() {
+			//获取棋盘元素
+			let grid = document.getElementsByClassName('grid');
+			//循环遍历棋盘
+			for (let i = 0; i < 3; i++) {
+				for (let j = 0; j < 3; j++) {
+					//创建格子元素
+					let lattic = document.createElement('div');
+					//往元素中添加类名
+					lattic.classList.add('lattic');
+					//创建圆棋子
+					let circle = document.createElement('p');
+					circle.classList.add('iconfont', 'icon-circle', 'blue');
+					//创建x棋子
+					let fork = document.createElement('p');
+					fork.classList.add('iconfont', 'icon-circle', 'purple');
+					let empty = document.createElement('i');
+					let chess = parrent[i * 3 + j] == 1 ? circle : parrent[i * 3 + y] == 2 ? fork : empty;
+					cell.appendChild(chess);
+					//点击事件
+					cell.addEventListener('click', () => move(x, y));
+					grid.appendChild(cell);
+					
+				}
+			}
+		}
+		
+		//落棋子
+		function move(x, y) {
+		  pattern[y][x] = player;
+		  player = 3 - player;
+		  build();
+		}
+	</script>
+</html>
