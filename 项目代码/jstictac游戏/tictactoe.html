@@ -1,104 +1,186 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-		<style>
-			* {
-				box-sizing: border-box;
-				background-color: cornflowerblue;
-			}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-tac-toe</title>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2079768_2oql7pr49rm.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+        background: #0f0e18;
+      }
+      .container {
+        margin: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      h1 {
+        color: #ea4dc5;
+      }
+      #board {
+        width: 300px;
+        height: 300px;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .cell {
+        width: 100px;
+        height: 100px;
+        background: #2d2f42;
+        border: 1px solid #0f0e18;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background 500ms ease;
+      }
+      .cell:hover {
+        background: #454966;
+      }
+      .cell .iconfont {
+        background: transparent;
+        width: 100%;
+        height: 100%;
+        font-size: 50px;
+        line-height: 100px;
+        text-align: center;
+        vertical-align: middle;
+      }
+      .blue {
+        color: #7ceefc;
+      }
+      .purple {
+        color: #ea4dc5;
+      }
+      #tips p {
+        color: #dddddd;
+      }
+    </style>
+  </head>
 
-			.tictactoe {
-				margin: 3rem;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				flex-direction: column;
-			}
+  <body>
+    <div class="container">
+      <h1>Tic-tac-toe with AI</h1>
+      <div id="board"></div>
+      <div id="tips"></div>
+    </div>
+  </body>
 
-			.board {
-				width: 300px;
-				height: 300px;
-				display: flex;
-				flex-wrap: wrap;
-			}
+  <script>
+    
+    let pattern = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-			.cell {
-				width: 100px;
-				height: 100px;
-				background: #2d2f42;
-				border: 1px solid #0f0e18;
-				cursor: pointer;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				transition: background 500ms ease;
-			}
+    let chess = 1;
+    let hasWinner = false;
 
-			.cell:hover {
-				background: #454966;
-			}
+    function build() {
+      // 获取棋盘元素
+      let board = document.getElementById('board');
 
-			.cell .iconfont {
-				background: transparent;
-				width: 100%;
-				height: 100%;
-				font-size: 50px;
-				line-height: 100px;
-				text-align: center;
-				vertical-align: middle;
-			}
+      board.innerHTML = '';
 
-			.blue {
-				color: #7ceefc;
-			}
+      // 循环棋盘，填充棋盘
+      for (let y = 0; y < 3; y++) {
+        for (let x = 0; x < 3; x++) {
+          let cell = document.createElement('div');
+          cell.classList.add('cell');
 
-			.purple {
-				color: #ea4dc5;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="tictactoe">
-			<div class="grid"></div>
-		</div>
-	</body>
-	<script>
-		let parrent = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-		let player=1;//代表棋子为剪刀
-		function build() {
-			//获取棋盘元素
-			let grid = document.getElementsByClassName('grid');
-			//循环遍历棋盘
-			for (let i = 0; i < 3; i++) {
-				for (let j = 0; j < 3; j++) {
-					//创建格子元素
-					let lattic = document.createElement('div');
-					//往元素中添加类名
-					lattic.classList.add('lattic');
-					//创建圆棋子
-					let circle = document.createElement('p');
-					circle.classList.add('iconfont', 'icon-circle', 'blue');
-					//创建x棋子
-					let fork = document.createElement('p');
-					fork.classList.add('iconfont', 'icon-circle', 'purple');
-					let empty = document.createElement('i');
-					let chess = parrent[i * 3 + j] == 1 ? circle : parrent[i * 3 + y] == 2 ? fork : empty;
-					cell.appendChild(chess);
-					//点击事件
-					cell.addEventListener('click', () => move(x, y));
-					grid.appendChild(cell);
-					
-				}
-			}
-		}
-		
-		//落棋子
-		function move(x, y) {
-		  pattern[y][x] = player;
-		  player = 3 - player;
-		  build();
-		}
-	</script>
+          // 创建圆圈棋子
+          let circle = document.createElement('i');
+          circle.classList.add('iconfont', 'icon-circle', 'blue');
+          // 创建叉叉棋子
+          let cross = document.createElement('i');
+          cross.classList.add('iconfont', 'icon-cross', 'purple');
+          // 创建空棋子
+          let empty = document.createElement('i');
+
+          let chessIcon =
+            pattern[y * 3 + x] == 2 ? cross : pattern[y * 3 + x] == 1 ? circle : empty;
+          cell.appendChild(chessIcon);
+          cell.addEventListener('click', () => move(x, y));
+          board.appendChild(cell);
+        }
+      }
+    }
+
+    /**
+     * 把棋子放入棋盘
+     */
+    function move(x, y) {
+      if (hasWinner || pattern[y * 3 + x]) return;
+
+      pattern[y * 3 + x] = chess;
+
+      if ((hasWinner = check(pattern, chess))) {
+        tips(chess == 2 ? '❌ is the winner!' : '⭕️ is the winner!');
+      }
+
+      chess = 3 - chess;
+
+      build();
+    }
+
+    /**
+     * 插入提示
+     */
+    function tips(message) {
+      let tips = document.getElementById('tips');
+
+      tips.innerHTML = '';
+
+      let text = document.createElement('p');
+      text.innerText = message;
+      tips.appendChild(text);
+    }
+
+    /**
+     * 检查棋盘中的所有棋子
+     */
+    function check(pattern, chess) {
+      // 首先检查所有横行
+      for (let i = 0; i < 3; i++) {
+        let win = true;
+        for (let j = 0; j < 3; j++) {
+          if (pattern[i * 3 + j] !== chess) win = false;
+        }
+        if (win) return true;
+      }
+
+      // 检查竖行
+      for (let i = 0; i < 3; i++) {
+        let win = true;
+        for (let j = 0; j < 3; j++) {
+          if (pattern[j * 3 + i] !== chess) win = false;
+        }
+        if (win) return true;
+      }
+
+      // 检查交叉行
+      // "反斜行 \ 检测"
+      {
+        let win = true;
+        for (let j = 0; j < 3; j++) {
+          if (pattern[j * 3 + j] !== chess) win = false;
+        }
+        if (win) return true;
+      }
+
+      // "正斜行 / 检测"
+      {
+        let win = true;
+        for (let j = 0; j < 3; j++) {
+          if (pattern[j * 3 + 2 - j] !== chess) win = false;
+        }
+        if (win) return true;
+      }
+
+      return false;
+    }
+
+
+    build(pattern);
+  </script>
 </html>
