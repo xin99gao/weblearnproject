@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic-tac-toe</title>
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_2079768_2oql7pr49rm.css" />
+    <link
+      rel="stylesheet"
+      href="//at.alicdn.com/t/font_2079768_2oql7pr49rm.css"
+    />
     <style>
       * {
         box-sizing: border-box;
@@ -64,123 +67,116 @@
   <body>
     <div class="container">
       <h1>Tic-tac-toe with AI</h1>
-      <div id="board"></div>
+      <div id="board">
+        <div class="cell" id="cell0"></div>
+        <div class="cell" id="cell1"></div>
+        <div class="cell" id="cell2"></div>
+        <div class="cell" id="cell3"></div>
+        <div class="cell" id="cell4"></div>
+        <div class="cell" id="cell5"></div>
+        <div class="cell" id="cell6"></div>
+        <div class="cell" id="cell7"></div>
+        <div class="cell" id="cell8"></div>
+      </div>
       <div id="tips"></div>
+      <div id="history"></div>
     </div>
   </body>
 
   <script>
-    
-    let pattern = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let pattern = [
+      { id: 'cell0', content: '' },
+      { id: 'cell1', content: '' },
+      { id: 'cell2', content: '' },
+      { id: 'cell3', content: '' },
+      { id: 'cell4', content: '' },
+      { id: 'cell5', content: '' },
+      { id: 'cell6', content: '' },
+      { id: 'cell7', content: '' },
+      { id: 'cell8', content: '' },
+    ]
+    const winnerConditions = [
+      ['cell0', 'cell1', 'cell2'],
+      ['cell3', 'cell4', 'cell5'],
+      ['cell6', 'cell7', 'cell8'],
+      ['cell0', 'cell3', 'cell6'],
+      ['cell1', 'cell4', 'cell7'],
+      ['cell2', 'cell5', 'cell8'],
+      ['cell0', 'cell4', 'cell8'],
+      ['cell2', 'cell4', 'cell6'],
+    ]
+    let chess = 1
+    let hasWinner = false
+    let history = [
+      { id: 'cell0', content: 'X' },
+      { id: 'cell1', content: 'O' },
+    ]
 
-    let chess = 1;
-    let hasWinner = false;
-
-    function build() {
-      // 获取棋盘元素
-      let board = document.getElementById('board');
-
-      board.innerHTML = '';
-
-      // 循环棋盘，填充棋盘
-      for (let y = 0; y < 3; y++) {
-        for (let x = 0; x < 3; x++) {
-          let cell = document.createElement('div');
-          cell.classList.add('cell');
-
-          // 创建圆圈棋子
-          let circle = document.createElement('i');
-          circle.classList.add('iconfont', 'icon-circle', 'blue');
-          // 创建叉叉棋子
-          let cross = document.createElement('i');
-          cross.classList.add('iconfont', 'icon-cross', 'purple');
-          // 创建空棋子
-          let empty = document.createElement('i');
-
-          let chessIcon =
-            pattern[y * 3 + x] == 2 ? cross : pattern[y * 3 + x] == 1 ? circle : empty;
-          cell.appendChild(chessIcon);
-          cell.addEventListener('click', () => move(x, y));
-          board.appendChild(cell);
-        }
+    function init() {
+      for (let pat of pattern) {
+        const patEle = document.querySelector(`#${pat.id}`)
+        patEle.addEventListener('click', () => move(pat.id))
       }
     }
-
+    // function recoverFromHistory(index) {
+    //   const validHis = history.slice(0, index)
+    //   const validHisIds = validHis.map((v) => v.id)
+    //   for (let pat of pattern) {
+    //     const patEle = document.querySelector(`#${pat.id}`)
+    //     if (!validHisIds.includes(pat.id)) {
+    //       patEle.innerText = ''
+    //     }
+    //   }
+    //   // 恢复游戏玩家
+    //   chess = index % 2 === 0 ? 2 : 1
+    // }
     /**
      * 把棋子放入棋盘
      */
-    function move(x, y) {
-      if (hasWinner || pattern[y * 3 + x]) return;
-
-      pattern[y * 3 + x] = chess;
-
-      if ((hasWinner = check(pattern, chess))) {
-        tips(chess == 2 ? '❌ is the winner!' : '⭕️ is the winner!');
+    function move(id) {
+      // 赢了
+      if (hasWinner) {
+        return
       }
+      // 有值 不能点击
+      // const content = pattern.find((v) => v.id === id)
+      const cellId = id[id.length - 1]
+      const content = pattern[Number(cellId)].content
+      if (content) {
+        return
+      }
+      pattern[Number(cellId)].content = chess
+      document.querySelector(`#${id}`).innerText =
+        chess === 1 ? 'O' : chess === 2 ? 'X' : ''
 
-      chess = 3 - chess;
+      if ((hasWinner = checkWinner(pattern, chess))) {
+        tips(chess == 2 ? '❌ is the winner!' : '⭕️ is the winner!')
+      }
+      // 变换玩家
+      chess = 3 - chess
+    }
 
-      build();
+    function checkWinner(pattern, chess) {
+      const chessIds = pattern
+        .filter((v) => v.content === chess)
+        .map((v) => v.id)
+      if (chessIds < 3) {
+        return false
+      }
+      return winnerConditions.some((v) => v.every((w) => chessIds.includes(w)))
     }
 
     /**
      * 插入提示
      */
     function tips(message) {
-      let tips = document.getElementById('tips');
-
-      tips.innerHTML = '';
-
-      let text = document.createElement('p');
-      text.innerText = message;
-      tips.appendChild(text);
+      let tips = document.getElementById('tips')
+      tips.innerHTML = ''
+      let text = document.createElement('p')
+      text.innerText = message
+      tips.appendChild(text)
     }
-
-    /**
-     * 检查棋盘中的所有棋子
-     */
-    function check(pattern, chess) {
-      // 首先检查所有横行
-      for (let i = 0; i < 3; i++) {
-        let win = true;
-        for (let j = 0; j < 3; j++) {
-          if (pattern[i * 3 + j] !== chess) win = false;
-        }
-        if (win) return true;
-      }
-
-      // 检查竖行
-      for (let i = 0; i < 3; i++) {
-        let win = true;
-        for (let j = 0; j < 3; j++) {
-          if (pattern[j * 3 + i] !== chess) win = false;
-        }
-        if (win) return true;
-      }
-
-      // 检查交叉行
-      // "反斜行 \ 检测"
-      {
-        let win = true;
-        for (let j = 0; j < 3; j++) {
-          if (pattern[j * 3 + j] !== chess) win = false;
-        }
-        if (win) return true;
-      }
-
-      // "正斜行 / 检测"
-      {
-        let win = true;
-        for (let j = 0; j < 3; j++) {
-          if (pattern[j * 3 + 2 - j] !== chess) win = false;
-        }
-        if (win) return true;
-      }
-
-      return false;
-    }
-
-
-    build(pattern);
+    init()
+    // build(pattern)
   </script>
 </html>
