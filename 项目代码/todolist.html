@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	</head>
+	<body>
+		<div class="header">
+		<div id="todo">
+			<h1>{{name}}</h1>
+			<input type="text" placeholder="添加todo"/>
+		</div>
+	   </div>
+	</body>
+	<script>
+		let vm=new Vue({
+			el:'#todo',
+			data:{
+				name:'ToDolist',
+				message:'添加todo'
+			},
+		   })
+	</script>
+	<style>
+		*{
+			box-sizing: border-box;
+			font-size: 25px;
+			font-weight: 50;
+		}
+		.header{
+			width:100%;
+			height:60px;
+			
+			background-color: #0F0E18;
+		}
+		#todo{
+			display: flex;
+			justify-content: center;
+			line-height: center;
+		}
+		input{
+			height: 32px;
+			width: 300px;
+			margin:17px 120px;
+			border-radius:5px;
+			font-size: 12px;
+		}
+		h1{
+			color: #ccc;
+			
+		}
+	</style>
+</html>
