@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+			<title>无标题文档</title>
+			<style>
+				.body {
+					margin: 100px 100px 0 100px;
+					width: 300px;
+					height: 300px;
+					overflow: hidden;
+				}
+
+				.div {
+					float: left;
+					width: 100px;
+					height: 100px;
+					border: 1px solid #000;
+					border-right: 0 none;
+					margin-left: -2px;
+					margin-top: -2px;
+					border-bottom: 0;
+				}
+			</style>
+		</head>
+	<body>
+		<div class="body">
+			<div class="div"></div>
+			<div class="div"></div>
+			<div class="div"></div>
+			<div class="div"></div>
+			<div class="div"></div>
+			<div class="div"></div>
+			<div class="div"></div>
+			<div class="div"></div>
+			<div class="div"></div>
+		</div>
+	</body>
+	<script>
+		let pattern = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+		let chess = 1;
+        let div=document.querySelector('.div');
+		let circle = document.createElement('i');
+		circle.classList.add('iconfont', 'icon-circle', 'blue');
+		// 创建叉叉棋子
+		let cross = document.createElement('i');
+		cross.classList.add('iconfont', 'icon-cross', 'purple');
+		// 创建空棋子
+		let empty = document.createElement('i');
+
+		for (let y = 0; y < 3; y++) {
+			for (let x = 0; x < 3; x++) {
+				let chessIcon =
+					pattern[y * 3 + x] == 2 ? cross : pattern[y * 3 + x] == 1 ? circle : empty;
+				div.appendChild(chessIcon);
+			}
+		}
+
+		
+		
+	</script>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-tac-toe</title>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2079768_2oql7pr49rm.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+        background: #0f0e18;
+      }
+      .container {
+        margin: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      #board {
+        width: 300px;
+        height: 300px;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .cell {
+        width: 100px;
+        height: 100px;
+        background: #2d2f42;
+        border: 1px solid #0f0e18;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background 500ms ease;
+      }
+      .cell:hover {
+        background: #454966;
+      }
+      .cell .iconfont {
+        background: transparent;
+        width: 100%;
+        height: 100%;
+        font-size: 50px;
+        line-height: 100px;
+        text-align: center;
+        vertical-align: middle;
+      }
+      .blue {
+        color: #7ceefc;
+      }
+      .purple {
+        color: #ea4dc5;
+      }
+      #tips p {
+        color: #dddddd;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Tic-tac-toe with AI</h1>
+      <div id="board"></div>
+      <div id="tips"></div>
+    </div>
+    <script>
+        let pattern = [
+        [2, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0]
+      ];
+      
+      let chess = 1;
+      
+      /** 渲染棋盘 */
+      function build() {
+        // 获取棋盘元素
+        let board = document.getElementById('board');
+      
+        board.innerHTML = '';
+      
+        // 填充棋盘
+        for (let y = 0; y < 3; y++) {
+          for (let x = 0; x < 3; x++) {
+            let cell = document.createElement('div');
+            cell.classList.add('cell');
+      
+            // 创建圆圈棋子
+            let circle = document.createElement('i');
+            circle.classList.add('iconfont', 'icon-circle', 'blue');
+            // 创建叉叉棋子
+            let cross = document.createElement('i');
+            cross.classList.add('iconfont', 'icon-cross', 'purple');
+            // 创建空棋子
+            let empty = document.createElement('i');
+      
+            let chessIcon = pattern[y][x] == 2 ? cross : pattern[y][x] == 1 ? circle : empty;
+            cell.appendChild(chessIcon);
+            board.appendChild(cell);
+          }
+        }
+      }
+        </script>
+  </body>
+
+
+</html>
